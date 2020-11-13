@@ -1,9 +1,9 @@
-const products = [];
+const products = []; //no longer used data pushed to JSON file in /data
 const fs = require('fs');
 const path = require('path');
 const p = path.join(path.dirname(process.mainModule.filename), 'data','products.json');
 
-const getProductsFromFIle = (cb) => {
+const getProductsFromFile = (cb) => {
   const p = path.join(path.dirname(process.mainModule.filename), 'data','products.json');
   fs.readFile(p,(err, fileContent) => {
     if (err) {
@@ -19,12 +19,16 @@ const getProductsFromFIle = (cb) => {
 }
 
 module.exports = class Product {
-  constructor(title) {
+  constructor(title, imageURL, description, price) {
     this.title = title;
+    this.imageURL = imageURL;
+    this.description = description;
+    this.price = price;
   }
 
     save() {
-      getProductsFromFIle(products => {
+      this.id = Math.random().toString();
+      getProductsFromFile(products => {
         //need an arrow function here so this does not lose its content
         //let products = [];
         products.push(this);
@@ -38,6 +42,13 @@ module.exports = class Product {
   }
 
     static fetchAll(cb) {    
-      getProductsFromFIle(cb);
+      getProductsFromFile(cb);
+    }
+
+    static findById(id,cb) { //Static methods are called without instantiating their class and are also not callable when the class is instantiated. Static methods are often used to create utility functions for an application.” In other words, static methods have no access to data stored in specific objects.
+      getProductsFromFile(products=> {
+        const product = products.find(p => p.id === id);
+        cb(product);
+      })
     }
 }

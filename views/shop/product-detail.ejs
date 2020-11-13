@@ -1,0 +1,23 @@
+<%- include('../includes/head.ejs') %>   
+</head>
+
+<body>
+    <%- include('../includes/navigation.ejs') %>
+<main class="centered">
+  <h1><%= product.title %></h1>
+  <hr>
+  <div>
+    <img src="<%= product.imageUrl %>">
+  </div>
+  <h2>
+    <%= product.price %>
+  </h2>
+  <p><%= product.description %></p>
+  <form action="/cart" method="post"> <!--no need to use a URL because a post request is being used here instead.-->
+    <button class='btn' type="submit">Add To Cart</button>
+    <input type = "hidden" name="productId" value="<%= product.Id %>">
+
+  </form>
+</main>
+
+    <%- include('../includes/end.ejs') %>
